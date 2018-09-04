@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    #circle {
+      width: 100px;
+      height: 100px;
+      background: orange;
+      border-radius: 50%;
+      cursor: move;
+      position: absolute;
+      left: 0;
+      top: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>user input：<input type="text"></div>
+
+  <div id='circle'></div>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      var lastTime = 0
+      var vendors = ['webkit', 'moz', 'ms', 'o']
+      for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame']
+        window.cancelAnimationFrame =
+          window[vendors[x] + 'CancelAnimationFrame'] ||
+          window[vendors[x] + 'CancelRequestAnimationFrame']
+      }
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = function (callback, element) {
+          var currTime = new Date().getTime()
+          var timeToCall = Math.max(0, 16 - (currTime - lastTime))
+          var id = window.setTimeout(function () {
+            callback(currTime + timeToCall)
+          }, timeToCall)
+          lastTime = currTime + timeToCall
+          return id
+        }
+      }
+      if (!window.cancelAnimationFrame) {
+        window.cancelAnimationFrame = function (id) {
+          clearTimeout(id)
+        }
+      }
+    })()
+
+
+    function IEVersion() {
+      var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
+      var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  
+      var isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器  
+      var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+      var isOpera = userAgent.indexOf("Opera") > -1;
+      var isChrome = userAgent.indexOf('Chrome') > -1;
+      if (isIE) {
+        var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+        reIE.test(userAgent);
+        var fIEVersion = parseFloat(RegExp["$1"]);
+        if (fIEVersion == 7) {
+          return 7;
+        } else if (fIEVersion == 8) {
+          return 8;
+        } else if (fIEVersion == 9) {
+          return 9;
+        } else if (fIEVersion == 10) {
+          return 10;
+        } else {
+          return 6;//IE版本<=7
+        }
+      } else if (isEdge) {
+        return 'edge';//edge
+      } else if (isOpera) {
+        return 'opera'
+      } else if (isChrome) {
+        return 'chrome'
+      } else if (isIE11) {
+        return 11; //IE11  
+      } else {
+        return -1;//不是ie浏览器
+      }
+    }
+
+    var LS = window.localStorage, IEversion = IEVersion(), useTimer = (IEversion < 8 && IEversion > -1) || IEversion == 'chrome'
+    function _onstorage(k, cb) {
+      var oldValue = LS[k]
+      return function (e) {
+        setTimeout(function () {
+          e = e || window.storageEvent
+          var key = e.key, newValue = e.newValue
+          if (!key) {
+            var v = LS[k]
+            if (v !== oldValue) {
+              key = k
+              newValue = v
+            }
+          }
+          if (key === k)
+            cb && cb(newValue)
+        }, 0)
+      }
+    }
+
+    function watch(k, cb) {
+      if (!useTimer) {
+        if (document.attachEvent && IEversion !== 'opera')
+          document.attachEvent("onstorage", _onstorage(k, cb));
+        else
+          window.addEventListener("storage", _onstorage(k, cb), false);
+      } else {
+        var listener = _onstorage(k, cb)
+        function executeFrame() {
+          listener({})
+          requestAnimationFrame(executeFrame)
+        }
+        executeFrame()
+      }
+    }
+
+
+    $(function () {
+      var position = JSON.parse(localStorage.getItem('position')) || ''
+      position && $("#circle").css(position)
+      watch('position', function (e) {
+        var pos = JSON.parse(e)
+        $("#circle").css(pos)
+      })
+
+      var move = false, x0, y0
+      $('#circle').mousedown(function (e) {
+        e = e || window.event
+        move = true
+        x0 = e.pageX - parseInt($('#circle').css('left'))
+        y0 = e.pageY - parseInt($('#circle').css('top'))
+      })
+      $(document).mousemove(function (e) {
+        e = e || window.event
+        if (move) {
+          var x = e.pageX - x0;
+          var y = e.pageY - y0;
+          localStorage.setItem("position", JSON.stringify({ "top": y, "left": x }));
+          $("#circle").css({ "top": y, "left": x });
+        }
+      }).mouseup(function () {
+        move = false
+      })
+      $('input')[0].onblur = function () {
+        socket.send(this.value);
+        localStorage.setItem("v", this.value);
+      };
+    });
+
+
+  </script>
+</body>
+
+</html>
