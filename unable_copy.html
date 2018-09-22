@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1>
+    如何防止复制网站上的文字
+  </h1>
+
+  <p>
+    他沉沦，他跌倒，你们一再嘲笑，须知，他跌倒在高于你们的上方。他乐极生悲，可他的强光紧接你们的黑暗。 <br>
+    <hr> ——尼采
+  </p>
+  <script>
+    document.oncontextmenu = function (e) {
+      e.returnValue = false
+    }
+
+    document.onselectstart = function (e) {
+      e.returnValue = false
+    }
+
+
+  </script>
+</body>
+
+</html>

@@ -44,3 +44,57 @@ if (!Array.prototype.shuffle) {
 }
 
 console.log(data.shuffle())
+
+// log打印
+function log() {
+  var args = Array.prototype.slice.call(arguments)
+  args.unshift('hello')
+  console.log.apply(console, args)
+}
+log(1, 2, 3)
+
+// bind的问题
+var x = 1
+var fn = function() {
+  console.log(this.x)
+}
+
+var obj1 = {
+  x: 11
+}
+var obj2 = {
+  x: 22
+}
+var obj3 = {
+  x: 33
+}
+var f1 = fn.bind(obj1)
+var f2 = fn.bind(obj1).bind(obj2)
+var f3 = fn
+  .bind(obj1)
+  .bind(obj2)
+  .bind(obj3)
+f1() // 11
+f2() // 11
+f3() // 11
+/**
+ * Function.prototype.myBind = function (context) {
+  if (typeof this !== 'function') {
+    throw new TypeError('Error')
+  }
+  var _this = this
+  var args = [...arguments].slice(1)
+  // 返回一个函数
+  return function F() {
+    // 因为返回了一个函数，我们可以 new F()，所以需要判断
+    if (this instanceof F) {
+      return new _this(...args, ...arguments)
+    }
+    return _this.apply(context, args.concat(...arguments))
+  }
+}
+var f2 = fn.bind(obj1).bind(obj2)  相当于 F.bind(obj2)此时F不是fn
+ * 
+ * 
+ * 
+*/
