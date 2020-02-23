@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div>
+      <h3>11</h3>
+      <h2>11</h2>
+      <ul>
+        <li><span>333</span></li>
+        <li><span>444</span></li>
+      </ul>
+
+      <div class="container">
+        <div class="content">
+          这是一段内容
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var els = document.querySelectorAll('*')
+
+      const output = Array.prototype.slice.call(els).reduce((res, next) => {
+        const nextTagName = next.tagName.toLowerCase()
+        res[nextTagName] = res[nextTagName] ? res[nextTagName] + 1 : 1
+        return res
+      }, {})
+
+      console.log(output)
+    </script>
+  </body>
+</html>
