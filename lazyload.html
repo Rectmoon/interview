@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .img-box {
+        margin-bottom: 20px;
+        height: 160px;
+        background-color: #ddd;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+
+    <script>
+      $(function() {
+        const $window = $(window)
+        const $container = $('#container')
+        let html = ''
+        Array.apply(null, { length: 20 }).forEach(item => {
+          html += ` <div class="img-box">
+              <img data-src="bg.jpg" alt=""/>
+            </div>`
+        })
+        $container.html(html)
+        $imgBoxs = $container.children('.img-box')
+        $window.on('load scroll', function() {
+          const B = $window.outerHeight() + $window.scrollTop()
+          $imgBoxs.each(function() {
+            const $this = $(this)
+            const A = $this.offset().top + $this.outerHeight()
+            const LOADED = $this.attr('loaded')
+            if (A <= B && LOADED !== 'true') {
+              $this.attr('loaded', 'true')
+              const $img = $this.children('img')
+              $img.attr('src', $img.attr('data-src'))
+              $img.on('load', () => $img.stop().fadeIn(300))
+            }
+          })
+        })
+      })
+    </script>
+  </body>
+</html>
