@@ -7,7 +7,7 @@ const u4 = 'http://localhost.com.cn/index.html?a=1&b=2'
 
 console.log(URL_REGEXP.exec(u4))
 
-// 六位正则, 同时包含数字、字母、下划线
+// 六位正则, 同时包含数字、大小写字母
 const regexp = /(?![0-9]+$)(?!^[a-z0-9]+$)(?!^[A-Z0-9]+$)(?!^[a-zA-Z]+$)^[a-zA-Z0-9]{6,16}$/
 console.log(regexp.test('11111222'))
 console.log(regexp.test('aaaaaaa'))
