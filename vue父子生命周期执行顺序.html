@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <script src="https://cdn.bootcss.com/vue/2.6.11/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <p>{{message}}</p>
+      <!-- <keep-alive> -->
+      <my-components :msg="msg1" v-if="show" @ud="handleUd"></my-components>
+      <!-- </keep-alive> -->
+      <button @click="handleClick">Click me</button>
+    </div>
+
+    <script>
+      const child = {
+        template: `<div @click='handleClick2'>from child: {{childMsg}}</div>`,
+        props: ['msg'],
+        data: function() {
+          return {
+            childMsg: 'child'
+          }
+        },
+        beforeCreate: function() {
+          debugger
+        },
+        created: function() {
+          debugger
+        },
+        beforeMount: function() {
+          debugger
+        },
+        mounted: function() {
+          debugger
+        },
+        beforeUpdate: function() {
+          alert('子组件页面视图更新前')
+        },
+        updated: function() {
+          alert('子组件页面视图更新后')
+        },
+        deactivated: function() {
+          alert('keepAlive停用')
+        },
+        activated: function() {
+          console.log('component activated')
+        },
+        beforeDestroy: function() {
+          console.group('beforeDestroy 销毁前状态===============》')
+          var state = {
+            el: this.$el,
+            data: this.$data,
+            message: this.message
+          }
+          console.log(this.$el)
+          console.log(state)
+        },
+        destroyed: function() {
+          console.group('destroyed 销毁完成状态===============》')
+          var state = {
+            el: this.$el,
+            data: this.$data,
+            message: this.message
+          }
+          console.log(this.$el)
+          console.log(state)
+        },
+        methods: {
+          handleClick2() {
+            this.childMsg += '1'
+            this.$emit('ud', 'hhh')
+          }
+        }
+      }
+
+      const vm = new Vue({
+        el: '#app',
+        data: {
+          message: 'father',
+          msg1: 'hello',
+          show: true
+        },
+        beforeCreate: function() {
+          debugger
+        },
+        created: function() {
+          debugger
+        },
+        beforeMount: function() {
+          debugger
+        },
+        mounted: function() {
+          debugger
+        },
+        beforeUpdate: function() {
+          alert('父组件页面视图更新前')
+        },
+        updated: function() {
+          alert('父组件页面视图更新后')
+        },
+        beforeDestroy: function() {
+          console.group('beforeDestroy 销毁前状态===============》')
+          var state = {
+            el: this.$el,
+            data: this.$data,
+            message: this.message
+          }
+          console.log(this.$el)
+          console.log(state)
+        },
+        destroyed: function() {
+          console.group('destroyed 销毁完成状态===============》')
+          var state = {
+            el: this.$el,
+            data: this.$data,
+            message: this.message
+          }
+          console.log(this.$el)
+          console.log(state)
+        },
+        components: {
+          'my-components': child
+        },
+        methods: {
+          handleClick() {
+            this.show = !this.show
+            this.msg1 = 'll'
+          },
+          handleUd(v) {
+            console.log(v)
+            this.message += v
+          }
+        }
+      })
+      /*
+      父beforeCreate->父created->父beforeMount->子beforeCreate->子created->子beforeMount->子mounted->父mounted
+
+      子组件更新过程
+          1. 子组件更新不影响父组件
+            子beforeUpdate->子updated->
+          2. 子组件更新影响父组件
+      　　    父beforeUpdate->子beforeUpdate->子updated->父updated
+
+      父组件更新过程
+      　　父beforeUpdate->父updated
+
+      销毁过程
+      　　父beforeDestroy->子beforeDestroy->子destroyed->父destroyed
+      */
+    </script>
+  </body>
+</html>
