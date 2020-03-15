@@ -1,4 +1,4 @@
-class AsyncCotroller {
+class AsyncController {
   constructor(name) {
     this.tasks = []
     const fn = () => {
@@ -48,7 +48,7 @@ class AsyncCotroller {
   }
 }
 
-const a = new AsyncCotroller('jack')
+const a = new AsyncController('jack')
 
 a.sleep(2)
   .sleepFirst(3)
