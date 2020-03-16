@@ -79,20 +79,40 @@ console.log(A)
   console.log(arr.rotate(2))
 })()
 
-// 滑动窗口最大值
-function maxInWindows (a, size) {
-  const arr = []
-  if (a.length == 0 || size <= 0) return arr
-  if (size === 1) return a
+!(function () {
+  // 滑动窗口最大值
+  function maxInWindows (a, size) {
+    const arr = []
+    if (a.length == 0 || size <= 0) return arr
+    if (size === 1) return a
 
-  const len = a.length - size + 1
-  let max
-  for (let i = 0; i < len; i++) {
-    max = Math.max.apply(null, a.slice(i, i + size))
-    arr[i] = max
+    const len = a.length - size + 1
+    let max
+    for (let i = 0; i < len; i++) {
+      max = Math.max.apply(null, a.slice(i, i + size))
+      arr[i] = max
+    }
+    return arr
   }
-  return arr
-}
 
-const a = [2, 3, 4, 2, 6, 2, 5, 1]
-console.log(maxInWindows(a, 3))
+  const a = [2, 3, 4, 2, 6, 2, 5, 1]
+  console.log(maxInWindows(a, 3))
+})()
+
+!(function () {
+  function maximumProduct (arr) {
+    const len = arr.length
+    if (len < 3) return false
+    arr.sort((a, b) => a - b)
+    return Math.max(
+      arr[len - 1] * arr[len - 2] * arr[len - 3],
+      arr[len - 1] * arr[0] * arr[1]
+    )
+  }
+
+  const a1 = [1, 5, 2, 3]
+  const a2 = [1, 5, 2, 3, -10, -20]
+
+  console.log(maximumProduct(a1))
+  console.log(maximumProduct(a2))
+})()
