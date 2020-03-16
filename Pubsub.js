@@ -1,10 +1,10 @@
 class Pubsub {
-  constructor() {
+  constructor () {
     this.handlers = {}
     this.topId = -1
   }
 
-  subscribe(topic, callback) {
+  subscribe (topic, callback) {
     const handlers = this.handlers[topic] || []
     const token = (++this.topId).toString()
     handlers.push({ token, callback })
@@ -12,7 +12,7 @@ class Pubsub {
     return token
   }
 
-  unsubscribe(token) {
+  unsubscribe (token) {
     for (const topic in this.handlers) {
       if (this.handlers[topic]) {
         for (let i = 0; i < this.handlers[topic].length; i++) {
@@ -26,7 +26,7 @@ class Pubsub {
     return false
   }
 
-  publish(topic, ...args) {
+  publish (topic, ...args) {
     const handlers = this.handlers[topic] || []
     handlers.forEach(handler => {
       handler.callback(topic, ...args)
@@ -36,7 +36,7 @@ class Pubsub {
 
 const ps = new Pubsub()
 
-const token = ps.subscribe('lzx', function(topic, data) {
+const token = ps.subscribe('lzx', function (topic, data) {
   console.log(topic + ':' + data)
 })
 

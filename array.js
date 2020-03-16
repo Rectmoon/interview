@@ -96,3 +96,69 @@ function maxInWindows (a, size) {
 
 const a = [2, 3, 4, 2, 6, 2, 5, 1]
 console.log(maxInWindows(a, 3))
+
+function swap (arr, i, j) {
+  ;[arr[i], arr[j]] = [arr[j], arr[i]]
+}
+
+// 输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于数组的后半部分
+function reOrderArray (arr) {
+  if (Array.isArray(arr)) {
+    let start = 0
+    let end = arr.length - 1
+    while (start < end) {
+      while (arr[start] % 2 === 1) {
+        start++
+      }
+      while (arr[end] % 2 === 0) {
+        end--
+      }
+      if (start < end) {
+        swap(arr, start, end)
+      }
+    }
+  }
+  return arr
+}
+
+console.log(reOrderArray(a))
+
+const a1 = [2, 3, 4, 2, 6, 2, 5, 1]
+
+// 偶数和偶数之间的相对位置不变
+function reOrderArray1 (arr) {
+  for (let i = 0, len = arr.length; i < len; i++) {
+    for (let j = 0; j < len - 1; j++) {
+      if (arr[j] % 2 == 0 && arr[j + 1] % 2 != 0) {
+        swap(arr, j, j + 1)
+      }
+    }
+  }
+  return arr
+}
+
+console.log(reOrderArray1(a1))
+
+const a2 = [2, 3, 4, 2, 6, 2, 5, 1]
+
+function reOrderArray2 (arr) {
+  const result = [],
+    len = arr.length
+  let j = 0
+  for (let i = 0; i < len; i++) {
+    if (arr[i] % 2 !== 0) {
+      result[j] = arr[i]
+      j++
+    }
+  }
+
+  for (let i = 0; i < len; i++) {
+    if (arr[i] % 2 === 0) {
+      result[j] = arr[i]
+      j++
+    }
+  }
+  return result
+}
+
+console.log(reOrderArray2(a2))

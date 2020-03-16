@@ -19,7 +19,7 @@ console.log(bar)
 而bar的引用没变，始终指向原来的{n:1, x: 1}, 最终变为{ n: 1, x: { n: 2 } }, 这就是最后bar引用的值
 */
 
-function a() {
+function a () {
   var o1 = (o2 = 5)
 }
 a()
