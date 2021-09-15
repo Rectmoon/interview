@@ -15,10 +15,11 @@ function asyncPool(poolLimit, array, iteratorFn) {
     if (i === array.length) return Promise.resolve()
 
     // 每调一次enqueue，初始化一个promise
-    const current = array[i++]
+    const current = array[i]
     const p = Promise.resolve().then(() => iteratorFn(current, i, array))
     // promise执行完毕，从executing数组中删除
     const e = p.then(() => executing.splice(executing.indexOf(e), 1))
+    i++
 
     // 放入promises数组
     promises.push(p)
