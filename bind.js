@@ -40,7 +40,11 @@ function fn (x, y) {
 fn.prototype.age = 26
 
 var bound = fn._bind(obj, 2)
-var person = new bound(3) //undefined 2 3
+var person = new bound(3) // undefined 2 3
 
 bound(9)
 console.log(person.age)
+
+fn.prototype.age = 16
+var person1 = new bound(4) // undefined 2 4
+console.log(person1.age)
